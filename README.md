@@ -26,7 +26,7 @@ config.js に SPARQLエンドポイント、クエリ、最初に表示する中
     // ズーム率を指定
     var initial_zoom = 10;
 
-SPARQLクエリは、`(function () {/* ... */}).toString().match(/\n([\s\S]*)\n/)[1];` の `...` の中に記述してください。また、?latitude, ?longitude にWGS84の緯度、経度を取得するようにクエリを書いてください。
+SPARQLクエリは、`(function () {/* ... */}).toString().match(/\n([\s\S]*)\n/)[1];` の `...` の中に記述してください。また、`?latitude`, `?longitude` にWGS84の緯度、経度を取得するようにクエリを書いてください。
 
 `icon.svg`を変更すると、地図上のアイコンを変更することができます。
 
