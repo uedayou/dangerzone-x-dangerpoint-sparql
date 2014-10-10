@@ -1,22 +1,30 @@
 function initialize() {
   // 位置情報データ取得
-  var sparqlQueryURI = 'http://lod.ac/sabae/sparql?query=SELECT+*%0A++WHERE+%7B%0A++++%3Furi+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23lat%3E+%3Flatitude+.%0A+++++%3Furi+%3Chttp%3A%2F%2Fwww.w3.org%2F2003%2F01%2Fgeo%2Fwgs84_pos%23long%3E+%3Flongitude+.+FILTER+regex(str(%3Furi)%2C+%22toilet%22)%0A++%7D&format=json';
-  d3.json(sparqlQueryURI, function(pointsJson){
-
-    // 位置情報データから母点の座標情報に
-    var sitePointsCoordinates = [];
-    pointsJson.results.bindings.forEach(function(point){
-      sitePointsCoordinates.push([point.longitude.value, point.latitude.value]);
-    });
-
-    drawMap(sitePointsCoordinates);
-  });
+  sendQuery(endpoint, query)
+  .fail(
+    function (xhr, textStatus, thrownError) {
+      //$('body').modalmanager('removeLoading');
+      alert("Error: A '" + textStatus+ "' occurred.");
+    }
+  )
+  .done(
+    function (json) {
+      // 位置情報データから母点の座標情報に
+      var sitePointsCoordinates = [];
+      json.results.bindings.forEach(function(point){
+        sitePointsCoordinates.push([point.longitude.value, point.latitude.value]);
+      });
+      drawMap(sitePointsCoordinates);
+    }
+  );
 }
 
 function drawMap(sitePointsCoordinates) {
   var mapOptions = {
-    center : new google.maps.LatLng(35.964, 136.18447420000007),
-    zoom   : 14,
+    center : new google.maps.LatLng(
+                    initial_latitude,
+                    initial_longitude),
+    zoom   : initial_zoom,
   };
 
   var map = new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
@@ -67,6 +75,8 @@ function drawMap(sitePointsCoordinates) {
       var polygons = d3.geom.voronoi(sitePointsCoordinatesPx);
       var voronoiPoints = [];
       for (var polyKey = 0; polyKey < polygons.length; polyKey++) {
+        // エラー処理
+        if (!(polyKey in polygons)) continue;
         polygons[polyKey].forEach(function(polygon){
           var voronoiPoint = {
             coordinatesPx : [ polygon[0],
@@ -107,7 +117,7 @@ function drawMap(sitePointsCoordinates) {
       var sitePointsAttributes = {
         "x" : function(d, i) { return sitePointsCoordinatesPx[i][0]-toiletMarkSize/2; },
         "y" : function(d, i) { return sitePointsCoordinatesPx[i][1]-toiletMarkSize/2; },
-        "xlink:href"  : "toilet.svg",
+        "xlink:href"  : icon_name,
         "height" : toiletMarkSize+"px",
         "width"  : toiletMarkSize+"px"
       };

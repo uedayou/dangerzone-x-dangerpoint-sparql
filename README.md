@@ -1,22 +1,33 @@
-トイレ危険地帯
-=================
-本アプリはLOD Challenge2013 ビジュアライゼーション部門への応募作品です。
+# ○○危険地帯
 
-作品URL
------------------
-[http://y4ashida.github.io/toilet/](http://y4ashida.github.io/toilet/)
+LODチャレンジJapan2013データ提供パートナー賞受賞作品「[トイレ危険地帯](https://github.com/y4ashida/toilet)」
+を汎用的に利用できるように修正しました。
 
+## 使い方
 
-作品概略
------------------
-鯖江市のトイレ情報データセットを利用して、トイレが無い場所の可視化を行いました。
+config.js に SPARQLエンドポイント、クエリ、最初に表示する中心位置（緯度、経度）とズーム率を指定してください。
 
-LODを使ってモノがある場所の可視化をすることは広まってきたので、本アプリではモノがないことを可視化することを目標に制作しました。
+    // SPARQLエンドポイントを指定
+    var endpoint = "http://db.lodc.jp/sparql";
+    // SPARQLクエリを指定
+    var query = (function () {/*
+    PREFIX geo:  <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    SELECT distinct *
+    FROM <http://lod.sfc.keio.ac.jp/challenge2013/show_status.php?id=d030>
+    WHERE{
+      ?uri <http://lodosaka.hozo.jp/category_1> "公衆トイレ"@ja ;
+      <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?latitude ;
+      <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?longitude .
+    }
+    */}).toString().match(/\n([\s\S]*)\n/)[1];
+    // 中心位置を指定
+    var initial_latitude =34.68206400648744;
+    var initial_longitude =135.49816131591797;
+    // ズーム率を指定
+    var initial_zoom = 10;
 
-作品詳細
------------------
-鯖江市のトイレ情報データセットを利用して、トイレ位置を地図上に表示させると同時にトイレが無い範囲を色付けして表示させました。
+SPARQLクエリは、`(function () {/* ... */}).toString().match(/\n([\s\S]*)\n/)[1];` の `...` の中に記述してください。また、?latitude, ?longitude にWGS84の緯度、経度を取得するようにクエリを書いてください。
 
-LODを使ってモノがある場所の可視化をすることは広まってきたので、本アプリではモノがないことを可視化することを目標に制作しました。
+`icon.svg`を変更すると、地図上のアイコンを変更することができます。
 
-データセットの差し替えによる逆マッシュアップによって、様々な場面で、市民の立場からの利便性向上や、行政やビジネスの立場からの意思決定材料に役立てられることを期待します。
+その他の詳細については、「[トイレ危険地帯](https://github.com/y4ashida/toilet)」を見てください。
