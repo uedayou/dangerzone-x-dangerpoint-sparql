@@ -3,6 +3,10 @@
 LODチャレンジJapan2013データ提供パートナー賞受賞作品「[トイレ危険地帯](https://github.com/y4ashida/toilet)」
 を汎用的に利用できるように修正しました。
 
+## デモ
+
+<http://uedayou.github.io/dangerzone-sparql/>
+
 ## 使い方
 
 config.js に SPARQLエンドポイント、クエリ、最初に表示する中心位置（緯度、経度）とズーム率を指定してください。
@@ -24,7 +28,7 @@ config.js に SPARQLエンドポイント、クエリ、最初に表示する中
     var initial_latitude =34.68206400648744;
     var initial_longitude =135.49816131591797;
     // ズーム率を指定
-    var initial_zoom = 10;
+    var initial_zoom = 11;
 
 SPARQLクエリは、`(function () {/* ... */}).toString().match(/\n([\s\S]*)\n/)[1];` の `...` の中に記述してください。また、`?latitude`, `?longitude` にWGS84の緯度、経度を取得するようにクエリを書いてください。
 
