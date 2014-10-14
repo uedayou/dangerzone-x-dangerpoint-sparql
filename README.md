@@ -1,6 +1,6 @@
 # ○○危険地帯
 
-LODチャレンジJapan2013データ提供パートナー賞受賞作品「[トイレ危険地帯](https://github.com/y4ashida/toilet)」
+LODチャレンジJapan2013データ提供パートナー賞受賞作品「[トイレ危険地帯](http://lod.sfc.keio.ac.jp/challenge2013/show_status.php?id=v008)」
 を汎用的に利用できるように修正しました。
 
 ## デモ
@@ -15,8 +15,7 @@ config.js に SPARQLエンドポイント、クエリ、最初に表示する中
     var endpoint = "http://db.lodc.jp/sparql";
     // SPARQLクエリを指定
     var query = (function () {/*
-    PREFIX geo:  <http://www.w3.org/2003/01/geo/wgs84_pos#>
-    SELECT distinct *
+    SELECT DISTINCT *
     FROM <http://lod.sfc.keio.ac.jp/challenge2013/show_status.php?id=d030>
     WHERE{
       ?uri <http://lodosaka.hozo.jp/category_1> "公衆トイレ"@ja ;
@@ -30,7 +29,7 @@ config.js に SPARQLエンドポイント、クエリ、最初に表示する中
     // ズーム率を指定
     var initial_zoom = 11;
 
-SPARQLクエリは、`(function () {/* ... */}).toString().match(/\n([\s\S]*)\n/)[1];` の `...` の中に記述してください。また、`?latitude`, `?longitude` にWGS84の緯度、経度を取得するようにクエリを書いてください。
+SPARQLクエリは、`(function () {/* ... */}).toString().match(/\n([\s\S]*)\n/)[1];` の `...` の部分に置き換えて記述してください。また、`?latitude`, `?longitude` にWGS84の緯度、経度を取得するようにクエリを書いてください。
 
 `icon.svg`を変更すると、地図上のアイコンを変更することができます。
 

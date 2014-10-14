@@ -2,12 +2,11 @@
 var endpoint = "http://db.lodc.jp/sparql";
 // SPARQLクエリを指定
 var query = (function () {/*
-PREFIX geo:  <http://www.w3.org/2003/01/geo/wgs84_pos#>
-SELECT distinct *
+SELECT DISTINCT *
 FROM <http://lod.sfc.keio.ac.jp/challenge2013/show_status.php?id=d030>
 WHERE{
   ?uri <http://lodosaka.hozo.jp/category_1> "公衆トイレ"@ja ;
-  <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?latitude ;
+  <http://www.w3.org/2003/01/geo/wgs84_pos#lat ?latitude ;
   <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?longitude .
 }
 */}).toString().match(/\n([\s\S]*)\n/)[1];
