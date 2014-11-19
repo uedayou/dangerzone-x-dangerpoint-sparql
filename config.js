@@ -9,6 +9,7 @@ WHERE{
   <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?latitude ;
   <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?longitude .
 }
+LIMIT 1000
 */}).toString().match(/\n([\s\S]*)\n/)[1];
 // 中心位置を指定
 var initial_latitude =34.68206400648744;
