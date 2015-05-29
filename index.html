@@ -1,24 +1,370 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>○○危険地帯</title>
+<!--
+    <title>大阪市 警察署 x 犯罪発生～大阪市の警察署・交番と犯罪発生地点の重ね合わせ～</title>
+-->
+    <title>危険地帯 x 危険ポイント</title>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+<!--
+<meta property="og:title" content="大阪市 警察署 x 犯罪発生～大阪市の警察署・交番と犯罪発生地点の重ね合わせ～" />
+<meta property="og:site_name" content="大阪市 警察署 x 犯罪発生" />
+<meta property="og:description" 
+  content="大阪市オープンデータの警察署・交番データと大阪府警察犯罪発生マップの犯罪発生地点を重ね合わせました。さらに、警察署や交番の「無い」地域もビジュアライズしています。" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://uedayou.net/osakacrimemap/" />
+<meta property="og:image" content="http://uedayou.net/osakacrimemap/osakacrimemap-image.png" />
+-->
+
+    <!--
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+    -->
+    <!--
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    -->
+
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="js/social-likes/social-likes_flat.css" rel="stylesheet">
     <link rel="stylesheet" href="css/app.css"/>
+    <style type="text/css">
+    <!--
+html, 
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    padding-top:50px;
+}
+
+tr{
+    margin:5px 2px;
+}
+
+.txtcenter{
+    text-align:center;
+}
+
+.social-likes__counter {
+    padding-left:5px;
+}
+-->
+    </style>
     <script type="text/javascript" src ="https://maps.googleapis.com/maps/api/js?sensor=false&language=ja"></script>
-    <script src="bower_components/d3/d3.min.js" charset="utf-8"></script>
-    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.13/d3.min.js" charset="utf-8"></script>
+    <!--script src="bower_components/jquery/jquery.min.js"></script-->
+    <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="js/social-likes/social-likes.min.js"></script>
+    <!--
+    <script src="bower_components/bootstrap/js/collapse.js"></script>
+    -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="http://uedayou.net/SPARQLTimeliner/js_sparql/sparql.js"></script>
     <script src="config.js"></script>
     <script src="js/app.js"></script>
   </head>
   <body>
-    <div class="container">
-      <div class="row">
-        <h1>○○危険地帯</h1>
-        <div id="map_canvas"></div>
+
+<div class="container-fluid" style="height:100%;margin:0;padding:0;">
+<div class="row-fluid">
+
+ <!-- Navigation -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom:0px;">
+<div class="container">
+<!-- Brand and toggle get grouped for better mobile display -->
+<div class="navbar-header">
+
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-bar-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+
+<a class="navbar-brand" href="./">
+
+<!--
+<div style="padding:0px;">
+    大阪市 警察署
+    <span class="glyphicon glyphicon-remove"></span>
+    犯罪発生
+</div>
+-->
+
+<div style="padding:0px;">
+    危険地帯
+    <span class="glyphicon glyphicon-remove"></span>
+    危険ポイント
+</div>
+
+</a>
+</div>
+<!-- Collect the nav links, forms, and other content for toggling -->
+
+
+<div class="collapse navbar-collapse" id="navigation-bar-collapse">
+<ul class="nav navbar-nav navbar-right">
+<li class="hidden-nav txtcenter" style="display:none;">
+<a href="#" data-toggle="modal" data-target="#howtouse">使い方・凡例</a>
+</li>
+<li class="hidden-nav txtcenter" style="display:none;">
+<a href="#" data-toggle="modal" data-target="#about">About</a>
+</li>
+<li class="txtcenter" style="padding:10px;">
+<div class="social-likes" data-url="http://uedayou.net/osakacrimemap/" data-zeroes="true" style="display:none;">
+    <div class="facebook social-likes_notext" title="Share link on Facebook" style="padding:2px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;"></div>
+</div>
+</li>
+<li class="txtcenter" style="padding:10px;">
+<div class="social-likes" data-url="http://uedayou.net/osakacrimemap/" data-zeroes="true" style="display:none;">
+    <div class="twitter social-likes_notext" title="Share link on Twitter" style="padding:2px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;"></div>
+</div>
+</li>
+</ul>
+</div>
+
+
+<!--
+<div class="collapse navbar-collapse" id="navigation-bar-collapse">
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a href="/osakacrimemap_old/" target="_blank" id="data">旧バージョンはこちら</a>
+</li>
+</ul>
+</div>
+-->
+
+<!-- /.navbar-collapse -->
+</div>
+<!-- /.container -->
+</nav>
+
+</div>
+
+
+<div class="row-fluid" style="padding:0;">
+    <!--
+    <div class="col-xs-12 col-sm-9 col-md-10" style="margin:0;padding:0;height:100%;">
+    -->
+    <div class="col-xs-12" style="margin:0;padding:0;height:100%;">
+        <div id="map_canvas" style="height:100%;padding:0;margin-bottom:"></div>
+        <div id="marker_info" style="display:none;background-color:rgba(230,230,230,0.7);position:absolute;bottom:0;height:50px;width:100%;">
+            <div id="marker-label" style="-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px;font-size:20px;background:#fff;margin-left:auto;margin-right:auto;margin-top:5px;padding:5px 10px;bordered:solid 1px;max-width:400px;min-width:200px;text-align:center;">
+            </div>
+        </div>
+    </div>
+<!--    <div class="hidden-xs col-sm-3 col-md-2" style="margin:0;word-wrap:break-word;overflow-y:auto;"> -->
+    <div class="hidden-xs" style="margin:0;word-wrap:break-word;overflow-y:auto;display:none;">
+
+        <h3>使い方</h3>
+
+    <p>
+        各アイコンを押すと、そのアイコンに関する情報が表示されます（警察署・交番であればその名称、犯罪なら犯罪の種類)。
+    </p>
+
+        <table class="table table-striped table-bordered" style="background:#fff;">
+          <tr>
+            <th colspan="2" class="txtcenter">
+              凡例
+            </th>
+          </tr>
+          <tr>
+            <td class="txtcenter">
+              <img src="ico05.png" style="width:20px;height:20px;" />
+            </td>
+            <td>
+              警察署・交番
+            </td>
+          </tr>
+          <tr>
+            <td class="txtcenter">
+              <img src="icon00.png" style="width:20px;height:20px;" />
+            </td>
+            <td>
+              ひったくり
+            </td>
+          </tr>
+          <tr>
+            <td class="txtcenter">
+              <img src="icon04.png" style="width:20px;height:20px;" />
+            </td>
+            <td>
+              路上強盗
+            </td>
+          </tr>
+          <tr>
+            <td class="txtcenter">
+              <img src="icon03.png" style="width:20px;height:20px;" />
+            </td>
+            <td>
+              子供被害情報
+            </td>
+          </tr>
+          <tr>
+            <td class="txtcenter">
+              <img src="icon02.png" style="width:20px;height:20px;" />
+            </td>
+            <td>
+              自動車盗難
+            </td>
+          </tr>
+        </table>
+
+<hr>
+<h3>
+    アプリについて
+</h3>
+
+<div class="app-description">
+
+    <p>
+
+        <a href="http://www.city.osaka.lg.jp/toshikeikaku/page/0000250227.html" target="_blank">大阪市が公開するオープンデータ</a>の中から、警察署・交番の位置情報を<a href="http://lodc.jp/" target="_blank">LODチャレンジ応募作品のSPARQLエンドポイント（試行版）</a>から取得し、<a href="https://github.com/uedayou/dangerzone-sparql" target="_blank">dangerzone-sparql</a>を使って警察署・交番の無い地域を可視化し、さらに<a href="http://www.map.police.pref.osaka.jp/Public/" target="_blank">大阪府警察犯罪発生マップ</a>から2014年12月14日～2015年1月14日に発生した犯罪発生地点を重ね合わせました。
+    </p>
+    <p>
+        警察アイコンは、警察署・交番の位置、半透明の赤い円はその地域に警察署・交番が無いこと、赤、青、黄、水色は、そこで起きた犯罪の種類を示します。
+    </p>
+    <p>
+        ※ 犯罪発生地点は人手でマッピングしていますので、正確な位置とズレがあります。
+    </p>
+</div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="howtouse" tabindex="-1" role="dialog" aria-labelledby="howtouselabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="howtouselabel">使い方・凡例</h3>
+      </div>
+      <div class="modal-body">
+    <p>
+        各アイコンを押すと、そのアイコンに関する情報が表示されます（警察署・交番であればその名称、犯罪なら犯罪の種類)。
+    </p>
+
+        <table class="table table-striped table-bordered" style="margin-left:auto;margin-right:auto;background:#fff;max-width:300px;">
+          <tr>
+            <th colspan="2" class="txtcenter">
+              凡例
+            </th>
+          </tr>
+          <tr>
+            <td class="txtcenter">
+              <img src="ico05.png" style="width:20px;height:20px;" />
+            </td>
+            <td>
+              警察署・交番
+            </td>
+          </tr>
+          <tr>
+            <td class="txtcenter">
+              <img src="icon00.png" style="width:20px;height:20px;" />
+            </td>
+            <td>
+              ひったくり
+            </td>
+          </tr>
+          <tr>
+            <td class="txtcenter">
+              <img src="icon04.png" style="width:20px;height:20px;" />
+            </td>
+            <td>
+              路上強盗
+            </td>
+          </tr>
+          <tr>
+            <td class="txtcenter">
+              <img src="icon03.png" style="width:20px;height:20px;" />
+            </td>
+            <td>
+              子供被害情報
+            </td>
+          </tr>
+          <tr>
+            <td class="txtcenter">
+              <img src="icon02.png" style="width:20px;height:20px;" />
+            </td>
+            <td>
+              自動車盗難
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
-  </body>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="aboutlabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="aboutlabel">大阪市 警察署 <span class="glyphicon glyphicon-remove"></span> 犯罪発生</h3>
+      </div>
+      <div class="modal-body">
+
+        <h4>アプリについて</h4>
+
+<div style="padding-left:20px;">
+    <p>
+        <a href="http://www.city.osaka.lg.jp/toshikeikaku/page/0000250227.html" target="_blank">大阪市が公開するオープンデータ</a>の中から、警察署・交番の位置情報を<a href="http://lodc.jp/" target="_blank">LODチャレンジ応募作品のSPARQLエンドポイント（試行版）</a>から取得し、<a href="https://github.com/uedayou/dangerzone-sparql" target="_blank">dangerzone-sparql</a>を使って警察署・交番の無い地域を可視化し、さらに<a href="http://www.map.police.pref.osaka.jp/Public/" target="_blank">大阪府警察犯罪発生マップ</a>から2014年12月14日～2015年1月14日に発生した犯罪発生地点を重ね合わせました。
+    </p>
+    <p>
+        警察アイコンは、警察署・交番の位置、半透明の赤い円はその地域に警察署・交番が無いこと、赤、青、黄、水色は、そこで起きた犯罪の種類を示します。
+    </p>
+    <p>
+        ※ 犯罪発生地点は人手でマッピングしていますので、正確な位置とズレがあります。
+    </p>
+
+</div>
+
+    <hr>
+
+    <h4>使い方</h4>
+
+    <div style="padding-left:20px;">
+        使い方と地図上のアイコンの説明は、<a href="#" data-dismiss="modal" data-toggle="modal" data-target="#howtouse">こちら</a>をご覧ください。
+</div>
+
+    <hr>
+
+    <h4>開発</h4>
+    <ul>
+    <li><a href="https://twitter.com/uedayou" target="_blank">@uedayou</a></li>
+    <li>satow</li>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45357765-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
 </html>
